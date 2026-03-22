@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Phoenix Roof Cost Estimator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background: #f7f7f9; }
+    .hero { padding: 48px 0; }
+    .card {
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    }
+    .result-box {
+      background: #f8fff8;
+      border: 1px solid #d9f0d9;
+      border-radius: 14px;
+      padding: 24px;
+    }
+    textarea, input, select {
+      width: 100%;
+      padding: .75rem;
+      border: 1px solid #ced4da;
+      border-radius: .5rem;
+    }
+    ul.errorlist {
+      color: #b02a37;
+      margin: .25rem 0 0;
+      padding-left: 1rem;
+      font-size: .9rem;
+    }
+    .radio-group label {
+      margin-right: 1rem;
+    }
+  </style>
+</head>
+<body>
+<div class="container hero">
+  <div class="row justify-content-center">
+    <div class="col-lg-10 text-center mb-4">
+      <h1 class="fw-bold">Phoenix Roof Replacement Cost Estimator</h1>
+      <p class="text-muted">
+        Get a fast preliminary estimate based on your roof details.
+        Final pricing depends on inspection, exact measurements, and roof condition.
+      </p>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-7">
+      <div class="card p-4">
+        <h3 class="mb-3">Get Your Estimate</h3>
+
+        <form method="post">
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+              {{ form.non_field_errors }}
+            </div>
+          {% endif %}
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">First Name</label>
+              {{ form.first_name }}
+              {{ form.first_name.errors }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Last Name</label>
+              {{ form.last_name }}
+              {{ form.last_name.errors }}
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Email</label>
+              {{ form.email }}
+              {{ form.email.errors }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Phone</label>
+              {{ form.phone }}
+              {{ form.phone.errors }}
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Property Address</label>
+            {{ form.address }}
+            {{ form.address.errors }}
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Building Type</label>
+              {{ form.building_type }}
+              {{ form.building_type.errors }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Approximate Roof Square Footage</label>
+              {{ form.approximate_sqft }}
+              {{ form.approximate_sqft.errors }}
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Stories</label>
+              {{ form.stories }}
+              {{ form.stories.errors }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Material Type</label>
+              {{ form.material_type }}
+              {{ form.material_type.errors }}
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Roof Complexity</label>
+            {{ form.roof_complexity }}
+            {{ form.roof_complexity.errors }}
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label d-block">{{ form.permission_for_quote.label }}</label>
+            <div class="radio-group">
+              {{ form.permission_for_quote }}
+            </div>
+            {{ form.permission_for_quote.errors }}
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label d-block">{{ form.have_insurance.label }}</label>
+            <div class="radio-group">
+              {{ form.have_insurance }}
+            </div>
+            {{ form.have_insurance.errors }}
+          </div>
+
+          <button type="submit" class="btn btn-danger btn-lg w-100">See My Estimate</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      {% if result %}
+        <div class="result-box">
+          <h3 class="fw-bold mb-3">Your Estimated Range</h3>
+          <div class="display-6 fw-bold mb-2">${{ result.low }} – ${{ result.high }}</div>
+          <div class="h5 text-muted mb-3">Midpoint: ${{ result.mid }}</div>
+          <p class="text-muted mb-2">Permit estimate included: ${{ result.permit }}</p>
+
+          {% if quote %}
+            <p class="mb-2"><strong>Quote ID:</strong> {{ quote.quote_id }}</p>
+          {% endif %}
+
+          <hr>
+
+          <p class="mb-3">
+            This is a preliminary estimate based on the information you submitted.
+            Final pricing may change after inspection, exact measurements, and material confirmation.
+          </p>
+
+          <div class="d-grid gap-2">
+            <a href="tel:480-470-9965" class="btn btn-danger">Call Now</a>
+            <a href="#" class="btn btn-outline-dark">Request Inspection</a>
+          </div>
+        </div>
+      {% else %}
+        <div class="card p-4">
+          <h4 class="fw-bold">How this works</h4>
+          <p class="text-muted mb-2">
+            This tool gives homeowners a quick roof replacement cost range before scheduling an inspection.
+          </p>
+          <ul class="mb-0">
+            <li>Fast preliminary estimate</li>
+            <li>Based on size, material, stories, and complexity</li>
+            <li>Final quote requires inspection</li>
+          </ul>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+</body>
+</html>

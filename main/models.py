@@ -161,6 +161,7 @@ class FinalQuote(models.Model):
 
     permit_cost = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     final_total_low = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+    final_total_mid = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
     final_total_high = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
 
     finalized = models.BooleanField(default=False)

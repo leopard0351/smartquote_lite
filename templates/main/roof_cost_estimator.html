@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -6,55 +7,430 @@
   <title>Phoenix Roof Cost Estimator</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body { background: #f7f7f9; }
-    .hero { padding: 48px 0; }
-    .card {
+    body {
+  background: linear-gradient(
+    180deg,
+    #1e293b 0%,        /* dark top (authority) */
+    #334155 18%,
+    #f8fafc 45%,       /* fade into light */
+    #eef2f7 100%
+  );
+  color: #1f2937;
+}
+
+    .hero {
+      padding: 48px 0 64px;
+    }
+        .hero-title,
+    .hero-subtitle,
+    .hero-support {
+    color: #ffffff;
+    }
+
+    .hero-support {
+    opacity: 0.9;
+}
+    .hero-title {
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 14px;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: #5b6470;
+      max-width: 860px;
+      margin: 0 auto 12px;
+    }
+
+    .trust-badge {
+  background: rgba(255,255,255,0.95);
+}
+
+    .hero-support {
+      max-width: 760px;
+      margin: 0 auto;
+      color: #6b7280;
+      font-size: 1rem;
+    }
+
+    .trust-badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .trust-badge {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-weight: 600;
+      font-size: .95rem;
+      box-shadow: 0 6px 18px rgba(0,0,0,.04);
+    }
+
+    .tiny-cta {
+      margin-top: 14px;
+      color: #6b7280;
+      font-size: .95rem;
+      font-weight: 500;
+    }
+
+    .why-card,
+    .review-card,
+    .trust-panel,
+    .step-panel {
+      background: #fff;
       border: none;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.08);
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.06);
     }
-    .result-box {
-      background: #f8fff8;
-      border: 1px solid #d9f0d9;
-      border-radius: 14px;
-      padding: 24px;
+
+    .why-card {
+      padding: 22px;
+      height: 100%;
     }
-    textarea, input, select {
+
+    .why-card h5 {
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .why-card p {
+      margin: 0;
+      color: #6b7280;
+    }
+
+    .main-card {
+      border: none;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 55px rgba(0,0,0,.10);
+      background: #fff;
+    }
+
+    .main-card-accent {
+      height: 6px;
+      background: linear-gradient(90deg, #dc3545 0%, #ff7a59 100%);
+    }
+
+    .main-card-body {
+      padding: 28px;
+    }
+
+    .step {
+      display: none;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    .step-title {
+      font-size: 1.55rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .step-subtitle {
+      color: #6b7280;
+      margin-bottom: 18px;
+    }
+
+    .choice-btn {
       width: 100%;
-      padding: .75rem;
-      border: 1px solid #ced4da;
-      border-radius: .5rem;
+      padding: 15px 16px;
+      border: 2px solid #d8dee8;
+      border-radius: 14px;
+      background: #fff;
+      font-weight: 700;
+      transition: all .18s ease;
+      margin-bottom: 12px;
+      text-align: left;
     }
+
+    .choice-btn:hover {
+      background: #eef5ff;
+      border-color: #2f80ed;
+      box-shadow: 0 6px 18px rgba(47,128,237,.10);
+    }
+
+    .choice-btn.selected,
+    .choice-btn.selected:hover,
+    .choice-btn.selected:focus,
+    .choice-btn.selected:active {
+      background: #2196F3 !important;
+      color: #fff !important;
+      border-color: #2196F3 !important;
+      box-shadow: 0 8px 20px rgba(33,150,243,.22) !important;
+    }
+
+    .photo-card {
+      border: 2px solid #d8dee8;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fff;
+      cursor: pointer;
+      transition: all .18s ease;
+      height: 100%;
+      box-shadow: 0 6px 18px rgba(0,0,0,.03);
+    }
+
+    .photo-card:hover {
+      border-color: #2f80ed;
+      box-shadow: 0 10px 24px rgba(47,128,237,.12);
+      transform: translateY(-1px);
+    }
+
+    .photo-card.selected {
+      border-color: #2196F3;
+      box-shadow: 0 10px 24px rgba(33,150,243,.16);
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      display: block;
+      background: #f3f4f6;
+    }
+
+    .photo-card .label {
+      padding: 12px;
+      text-align: center;
+      font-weight: 700;
+      font-size: .95rem;
+    }
+
+    .progress-note {
+      color: #6b7280;
+      font-size: .92rem;
+      margin-top: 14px;
+    }
+
+    .analyzing {
+      text-align: center;
+      padding: 48px 12px;
+    }
+
+    .spinner-border {
+      width: 3rem;
+      height: 3rem;
+    }
+
+    .locked-box {
+      background: linear-gradient(180deg, #fcfcfd 0%, #f7f8fb 100%);
+      border: 1px solid #e6e9ef;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .locked-label {
+      font-size: .92rem;
+      color: #6b7280;
+      margin-bottom: 10px;
+    }
+
+    .blurred-estimate {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #9aa3af;
+      filter: blur(6px);
+      user-select: none;
+      margin-bottom: 12px;
+      letter-spacing: -.02em;
+    }
+
+    .value-stack {
+      background: #fff;
+      border: 1px solid #eef1f5;
+      border-radius: 14px;
+      padding: 16px;
+      margin: 18px 0;
+    }
+
+    .value-stack p {
+      margin: 0;
+      color: #374151;
+      font-weight: 600;
+      line-height: 1.7;
+    }
+
+    .trust-panel {
+      padding: 26px;
+      height: 100%;
+    }
+
+    .trust-panel h4 {
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .trust-panel p,
+    .trust-panel li {
+      color: #6b7280;
+    }
+
+    .form-label {
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    textarea,
+    input,
+    select {
+      width: 100%;
+      padding: .85rem .9rem;
+      border: 1px solid #d1d5db;
+      border-radius: .7rem;
+      background: #fff;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+
+    textarea:focus,
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #2f80ed;
+      box-shadow: 0 0 0 4px rgba(47,128,237,.10);
+    }
+
     ul.errorlist {
       color: #b02a37;
-      margin: .25rem 0 0;
+      margin: .35rem 0 0;
       padding-left: 1rem;
       font-size: .9rem;
     }
-    .radio-group label {
-      margin-right: 1rem;
+
+    .submit-note {
+      font-size: .86rem;
+      color: #6b7280;
+      margin-top: 8px;
+    }
+
+    .review-card {
+      padding: 22px;
+      height: 100%;
+    }
+
+    .review-stars {
+      color: #f59e0b;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+    }
+
+    .review-card p {
+      color: #4b5563;
+      margin-bottom: 14px;
+    }
+
+    .review-author {
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    .section-space {
+      margin-top: 28px;
+    }
+
+    .btn-danger {
+      background: #dc3545;
+      border-color: #dc3545;
+    }
+
+    .btn-danger:hover {
+      background: #c82333;
+      border-color: #bd2130;
+    }
+
+    @media (max-width: 991px) {
+  .mobile-reorder {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-col {
+    order: 1;
+  }
+
+  .why-col {
+    order: 2;
+  }
+
+  .trust-col {
+    order: 3;
+  }
+}
+
+    @media (max-width: 991px) {
+      .hero {
+        padding-top: 34px;
+      }
+      .trust-panel {
+        margin-top: 20px;
+      }
+      .main-card-body {
+        padding: 22px;
+      }
     }
   </style>
 </head>
 <body>
 <div class="container hero">
+  <!-- HERO -->
   <div class="row justify-content-center">
-    <div class="col-lg-10 text-center mb-4">
-      <h1 class="fw-bold">Phoenix Roof Replacement Cost Estimator</h1>
-      <p class="text-muted">
-        Get a fast preliminary estimate based on your roof details.
-        Final pricing depends on inspection, exact measurements, and roof condition.
+    <div class="col-lg-11 text-center mb-4">
+      <h1 class="hero-title">Phoenix Roof Cost Estimator</h1>
+      <p class="hero-subtitle">
+        See what your roof may cost before you spend thousands.
       </p>
+      <p class="hero-support">
+        Answer a few quick questions to get a rough estimate and find out whether your roof may need repair, replacement, or simply monitoring.
+      </p>
+
+      <div class="trust-badges">
+        <div class="trust-badge">4.9★ Google Rating</div>
+        <div class="trust-badge">Licensed &amp; Insured</div>
+        <div class="trust-badge">Fast, No-Pressure Inspection</div>
+      </div>
+
+      <div class="tiny-cta">Get your estimate in under 30 seconds. No obligation.</div>
     </div>
   </div>
 
-  <div class="row g-4">
-    <div class="col-lg-7">
-      <div class="card p-4">
-        <h3 class="mb-3">Get Your Estimate</h3>
+  <!-- WHY USE THIS -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="why-card">
+        <h5>Avoid Overpaying</h5>
+        <p>Get a rough range before committing to costly repairs or replacement.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="why-card">
+        <h5>Understand Your Roof</h5>
+        <p>See how size, condition, and roof type can affect local Phoenix pricing.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="why-card">
+        <h5>Get Expert Next Steps</h5>
+        <p>Request a free inspection if you want a more detailed roof report.</p>
+      </div>
+    </div>
+  </div>
 
-        <form method="post">
-          {% csrf_token %}
+  <!-- MAIN -->
+  <div class="row g-4 align-items-start mobile-reorder">
+    <div class="col-lg-7">
+      <div class="main-card">
+        <div class="main-card-accent"></div>
+        <div class="main-card-body">
 
           {% if form.non_field_errors %}
             <div class="alert alert-danger">
@@ -62,130 +438,369 @@
             </div>
           {% endif %}
 
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">First Name</label>
-              {{ form.first_name }}
-              {{ form.first_name.errors }}
+          <!-- STEP 1 -->
+          <div id="step1" class="step active">
+            <div class="step-title">Step 1: Approximate Home Size</div>
+            <div class="step-subtitle">Start with a rough size. We’ll refine from there.</div>
+
+            <button type="button" class="choice-btn" data-field="approximate_sqft" data-value="1200">
+              Under 1,500 sq ft
+            </button>
+            <button type="button" class="choice-btn" data-field="approximate_sqft" data-value="2000">
+              1,500–2,500 sq ft
+            </button>
+            <button type="button" class="choice-btn" data-field="approximate_sqft" data-value="3000">
+              2,500+ sq ft
+            </button>
+
+            <div class="progress-note">
+              Rough estimate only. Final pricing depends on size, condition, material, and inspection findings.
             </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Last Name</label>
-              {{ form.last_name }}
-              {{ form.last_name.errors }}
+
+            <div class="mt-3 text-end">
+              <button type="button" class="btn btn-danger" onclick="goToStep(2)">Next</button>
             </div>
           </div>
 
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Email</label>
-              {{ form.email }}
-              {{ form.email.errors }}
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Phone</label>
-              {{ form.phone }}
-              {{ form.phone.errors }}
+          <!-- STEP 2 -->
+          <div id="step2" class="step">
+            <div class="step-title">Step 2: Roof Situation</div>
+            <div class="step-subtitle">What best describes your roof right now?</div>
+
+            <button type="button" class="choice-btn" data-field="roof_situation" data-value="Older roof / wear">
+              Older roof / normal wear
+            </button>
+            <button type="button" class="choice-btn" data-field="roof_situation" data-value="Leak or visible damage">
+              Leak or visible damage
+            </button>
+            <button type="button" class="choice-btn" data-field="roof_situation" data-value="Just checking replacement cost">
+              Just checking replacement cost
+            </button>
+
+            <div class="mt-3 d-flex justify-content-between">
+              <button type="button" class="btn btn-outline-secondary" onclick="goToStep(1)">Back</button>
+              <button type="button" class="btn btn-danger" onclick="goToStep(3)">Next</button>
             </div>
           </div>
 
-          <div class="mb-3">
-            <label class="form-label">Property Address</label>
-            {{ form.address }}
-            {{ form.address.errors }}
+          <!-- STEP 3 -->
+          <div id="step3" class="step">
+            <div class="step-title">Step 3: Roof Type</div>
+            <div class="step-subtitle">Choose the closest match.</div>
+
+            <div class="row g-3">
+              <div class="col-md-4">
+                <div class="photo-card" data-field="material_type" data-value="asphalt">
+                  <img src="{% static 'main/img/roof-types/asphalt.jpg' %}" alt="Asphalt">
+                  <div class="label">Asphalt</div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="photo-card" data-field="material_type" data-value="metal">
+                  <img src="{% static 'main/img/roof-types/metal.jpg' %}" alt="Metal">
+                  <div class="label">Metal</div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="photo-card" data-field="material_type" data-value="clay_tile">
+                  <img src="{% static 'main/img/roof-types/tile.jpg' %}" alt="Tile">
+                  <div class="label">Tile</div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="photo-card" data-field="material_type" data-value="rolled_roofing">
+                  <img src="{% static 'main/img/roof-types/flat.jpg' %}" alt="Flat / Low Slope">
+                  <div class="label">Flat / Low Slope</div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="photo-card" data-field="material_type" data-value="composite">
+                  <img src="{% static 'main/img/roof-types/composite.jpg' %}" alt="Composite">
+                  <div class="label">Composite</div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="photo-card" data-field="material_type" data-value="asphalt">
+                  <img src="{% static 'main/img/roof-types/not-sure.jpg' %}" alt="Not Sure">
+                  <div class="label">Not Sure</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-3 d-flex justify-content-between">
+              <button type="button" class="btn btn-outline-secondary" onclick="goToStep(2)">Back</button>
+              <button type="button" class="btn btn-danger" onclick="goToStep(4)">Next</button>
+            </div>
           </div>
 
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Building Type</label>
-              {{ form.building_type }}
-              {{ form.building_type.errors }}
+          <!-- STEP 4 -->
+          <div id="step4" class="step">
+            <div class="step-title">Step 4: Roof Complexity</div>
+            <div class="step-subtitle">Pick the closest match.</div>
+
+            <div class="row g-3">
+              <div class="col-md-3">
+                <div class="photo-card" data-field="roof_complexity" data-value="Simple">
+                  <img src="{% static 'main/img/roof-complexity/simple.jpg' %}" alt="Simple">
+                  <div class="label">Simple</div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="photo-card" data-field="roof_complexity" data-value="Moderate">
+                  <img src="{% static 'main/img/roof-complexity/moderate.jpg' %}" alt="Moderate">
+                  <div class="label">Moderate</div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="photo-card" data-field="roof_complexity" data-value="Complex">
+                  <img src="{% static 'main/img/roof-complexity/complex.jpg' %}" alt="Complex">
+                  <div class="label">Complex</div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="photo-card" data-field="roof_complexity" data-value="Moderate">
+                  <img src="{% static 'main/img/roof-complexity/not-sure.jpg' %}" alt="Not Sure">
+                  <div class="label">Not Sure</div>
+                </div>
+              </div>
             </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Approximate Roof Square Footage</label>
-              {{ form.approximate_sqft }}
-              {{ form.approximate_sqft.errors }}
+
+            <div class="mt-3 d-flex justify-content-between">
+              <button type="button" class="btn btn-outline-secondary" onclick="goToStep(3)">Back</button>
+              <button type="button" class="btn btn-danger" onclick="startAnalyzing()">Continue</button>
             </div>
           </div>
 
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Stories</label>
-              {{ form.stories }}
-              {{ form.stories.errors }}
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Material Type</label>
-              {{ form.material_type }}
-              {{ form.material_type.errors }}
+          <!-- STEP 5 -->
+          <div id="step5" class="step">
+            <div class="analyzing">
+              <div class="spinner-border text-danger mb-3" role="status"></div>
+              <h3 class="mb-2 fw-bold">Building Your Estimate...</h3>
+              <p class="text-muted mb-0">Comparing local Phoenix pricing and roof factors.</p>
             </div>
           </div>
 
-          <div class="mb-3">
-            <label class="form-label">Roof Complexity</label>
-            {{ form.roof_complexity }}
-            {{ form.roof_complexity.errors }}
-          </div>
+          <!-- STEP 6 -->
+          <div id="step6" class="step">
+            <div class="step-title">Your Estimate Is Ready</div>
+            <div class="step-subtitle">Based on the details you provided</div>
 
-          <div class="mb-3">
-            <label class="form-label d-block">{{ form.permission_for_quote.label }}</label>
-            <div class="radio-group">
-              {{ form.permission_for_quote }}
+            <div class="locked-box">
+              <div class="locked-label">Estimated replacement range</div>
+              <div class="blurred-estimate" id="blurredEstimate">$8,000 – $18,000</div>
+              <p class="mb-0 text-muted">
+                Enter your details to view your saved estimate and request a free roof inspection.
+              </p>
             </div>
-            {{ form.permission_for_quote.errors }}
-          </div>
 
-          <div class="mb-3">
-            <label class="form-label d-block">{{ form.have_insurance.label }}</label>
-            <div class="radio-group">
-              {{ form.have_insurance }}
+            <div class="value-stack">
+              <p>
+                ✔ See if your roof may need repair, replacement, or simple monitoring<br>
+                ✔ Avoid spending money too early without clarity<br>
+                ✔ Get next steps from a local Phoenix roofing contractor
+              </p>
             </div>
-            {{ form.have_insurance.errors }}
+
+            <form method="post" action="{% url 'main:roof_cost_estimator' business.slug %}">
+              {% csrf_token %}
+
+              <!-- Hidden Django fields -->
+              <input type="hidden" name="building_type" id="id_building_type" value="residential">
+              <input type="hidden" name="approximate_sqft" id="id_approximate_sqft">
+              <input type="hidden" name="stories" id="id_stories" value="1">
+              <input type="hidden" name="material_type" id="id_material_type">
+              <input type="hidden" name="roof_complexity" id="id_roof_complexity">
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">First Name</label>
+                  <input type="text" name="first_name" required>
+                  {{ form.first_name.errors }}
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Last Name</label>
+                  <input type="text" name="last_name" required>
+                  {{ form.last_name.errors }}
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Phone Number</label>
+                  <input type="tel" name="phone" required>
+                  {{ form.phone.errors }}
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Email (Optional)</label>
+                  <input type="email" name="email">
+                  {{ form.email.errors }}
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Property Address</label>
+                <textarea name="address" rows="2" required></textarea>
+                {{ form.address.errors }}
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label d-block">Are you the owner or do you have permission to request an estimate?</label>
+                <label class="me-3"><input type="radio" name="permission_for_quote" value="True" required> Yes</label>
+                <label><input type="radio" name="permission_for_quote" value="False" required> No</label>
+                {{ form.permission_for_quote.errors }}
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label d-block">Do you have property insurance?</label>
+                <label class="me-3"><input type="radio" name="have_insurance" value="True" required> Yes</label>
+                <label><input type="radio" name="have_insurance" value="False" required> No</label>
+                {{ form.have_insurance.errors }}
+              </div>
+
+              <button type="submit" class="btn btn-danger btn-lg w-100">
+                View My Estimate &amp; Request Free Inspection
+              </button>
+
+              <div class="submit-note">
+                Takes less than 30 seconds • No pressure • Just clear next steps
+              </div>
+            </form>
           </div>
 
-          <button type="submit" class="btn btn-danger btn-lg w-100">See My Estimate</button>
-        </form>
+        </div>
       </div>
     </div>
 
+    <!-- SIDE PANEL -->
     <div class="col-lg-5">
-      {% if result %}
-        <div class="result-box">
-          <h3 class="fw-bold mb-3">Your Estimated Range</h3>
-          <div class="display-6 fw-bold mb-2">${{ result.low }} – ${{ result.high }}</div>
-          <div class="h5 text-muted mb-3">Midpoint: ${{ result.mid }}</div>
-          <p class="text-muted mb-2">Permit estimate included: ${{ result.permit }}</p>
+      <div class="trust-panel">
+        <h4>Why Phoenix Homeowners Use This</h4>
+        <p>
+          Roof size, type, complexity, and condition all affect cost. This gives you a quick preliminary range before scheduling a free inspection.
+        </p>
+        <ul class="mb-0">
+          <li>Based on Phoenix-area pricing logic</li>
+          <li>Helps you avoid overspending too early</li>
+          <li>Free inspection available after estimate</li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
-          {% if quote %}
-            <p class="mb-2"><strong>Quote ID:</strong> {{ quote.quote_id }}</p>
-          {% endif %}
-
-          <hr>
-
-          <p class="mb-3">
-            This is a preliminary estimate based on the information you submitted.
-            Final pricing may change after inspection, exact measurements, and material confirmation.
-          </p>
-
-          <div class="d-grid gap-2">
-            <a href="tel:480-470-9965" class="btn btn-danger">Call Now</a>
-            <a href="#" class="btn btn-outline-dark">Request Inspection</a>
-          </div>
-        </div>
-      {% else %}
-        <div class="card p-4">
-          <h4 class="fw-bold">How this works</h4>
-          <p class="text-muted mb-2">
-            This tool gives homeowners a quick roof replacement cost range before scheduling an inspection.
-          </p>
-          <ul class="mb-0">
-            <li>Fast preliminary estimate</li>
-            <li>Based on size, material, stories, and complexity</li>
-            <li>Final quote requires inspection</li>
-          </ul>
-        </div>
-      {% endif %}
+  <!-- REVIEWS -->
+  <div class="row g-3 section-space">
+    <div class="col-md-4">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p>“Professional, honest, and fast. They explained everything clearly and didn’t push a replacement we didn’t need.”</p>
+        <div class="review-author">— Phoenix Homeowner</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p>“Quick response and easy to work with. The inspection gave us real clarity on our roof.”</p>
+        <div class="review-author">— Scottsdale Homeowner</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p>“Very knowledgeable team. They walked us through options without pressure and made the process simple.”</p>
+        <div class="review-author">— Mesa Homeowner</div>
+      </div>
     </div>
   </div>
 </div>
+
+<script>
+  const wizardData = {
+    approximate_sqft: "",
+    roof_situation: "",
+    material_type: "",
+    roof_complexity: ""
+  };
+
+  function goToStep(stepNumber) {
+    document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+    document.getElementById('step' + stepNumber).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function startAnalyzing() {
+    goToStep(5);
+
+    setTimeout(function() {
+      buildBlurredEstimate();
+      goToStep(6);
+    }, 1800);
+  }
+
+  function buildBlurredEstimate() {
+    let low = 8000;
+    let high = 12000;
+
+    const sqft = parseInt(wizardData.approximate_sqft || "1200", 10);
+
+    if (sqft <= 1500) {
+      low = 8000;
+      high = 12000;
+    } else if (sqft <= 2500) {
+      low = 12000;
+      high = 18000;
+    } else {
+      low = 18000;
+      high = 25000;
+    }
+
+    if (wizardData.roof_complexity === "Complex") {
+      low += 2000;
+      high += 4000;
+    } else if (wizardData.roof_complexity === "Moderate") {
+      low += 1000;
+      high += 2000;
+    }
+
+    if (wizardData.roof_situation === "Leak or visible damage") {
+      low += 1000;
+      high += 2000;
+    }
+
+    document.getElementById('blurredEstimate').innerText =
+      '$' + low.toLocaleString() + ' – $' + high.toLocaleString();
+
+    document.getElementById('id_approximate_sqft').value = wizardData.approximate_sqft;
+    document.getElementById('id_material_type').value = wizardData.material_type;
+    document.getElementById('id_roof_complexity').value = wizardData.roof_complexity;
+  }
+
+  document.querySelectorAll('.choice-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const field = this.dataset.field;
+      const value = this.dataset.value;
+
+      document.querySelectorAll('.choice-btn[data-field="' + field + '"]').forEach(el => {
+        el.classList.remove('selected');
+      });
+
+      this.classList.add('selected');
+      wizardData[field] = value;
+    });
+  });
+
+  document.querySelectorAll('.photo-card').forEach(card => {
+    card.addEventListener('click', function() {
+      const field = this.dataset.field;
+      const value = this.dataset.value;
+
+      document.querySelectorAll('.photo-card[data-field="' + field + '"]').forEach(el => {
+        el.classList.remove('selected');
+      });
+
+      this.classList.add('selected');
+      wizardData[field] = value;
+    });
+  });
+</script>
 </body>
 </html>

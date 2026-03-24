@@ -3,7 +3,7 @@ from django import forms
 class RoofCostEstimatorForm(forms.Form):
     first_name = forms.CharField(max_length=100)
     last_name = forms.CharField(max_length=100)
-    email = forms.EmailField()
+    email = forms.EmailField(required=False)
     phone = forms.CharField(max_length=20)
     address = forms.CharField(widget=forms.Textarea(attrs={"rows": 2}))
 
@@ -42,7 +42,6 @@ class RoofCostEstimatorForm(forms.Form):
     ])
 
     permission_for_quote = forms.TypedChoiceField(
-        label="Are you the owner or do you have permission to request an estimate?",
         choices=((True, "Yes"), (False, "No")),
         coerce=lambda x: x == "True",
         widget=forms.RadioSelect,
@@ -50,7 +49,6 @@ class RoofCostEstimatorForm(forms.Form):
     )
 
     have_insurance = forms.TypedChoiceField(
-        label="Do you have property insurance?",
         choices=((True, "Yes"), (False, "No")),
         coerce=lambda x: x == "True",
         widget=forms.RadioSelect,
